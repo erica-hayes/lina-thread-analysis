@@ -1,0 +1,22 @@
+{
+  "name": "lina-thread-analysis",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic Reddit thread analysis engine for tone, intent, escalation, and conversational risk.",
+  "main": "dist/core/analyzeThread.js",
+  "scripts": {
+    "dev": "npm run dev:view",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint \"src/**/*.ts\"",
+    "test:basic": "npm run build && node dist/test/runAnalyzeThread.js",
+    "dev:prepare": "npm run build && node scripts/generateDevAnalysis.js",
+    "dev:view": "npm run dev:prepare && python3 -m http.server 4173 -d dev"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9.23.0",
+    "typescript": "^5.8.2"
+  }
+}

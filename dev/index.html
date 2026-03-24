@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lina Thread Analysis Dev View</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="page-header">
+        <h1>Lina Thread Analysis</h1>
+        <p>Dev sandbox: left mock Reddit thread + right analysis tabs with interactive highlighting</p>
+      </header>
+
+      <section class="workspace-grid">
+        <section class="thread-pane">
+          <div class="panel">
+            <h2>Thread Snapshot</h2>
+            <div id="thread-info" class="grid two"></div>
+            <div id="quick-metrics" class="grid three"></div>
+          </div>
+
+          <div class="panel">
+            <div class="thread-header-row">
+              <h2>Mock Reddit Thread</h2>
+              <button id="clear-highlight" type="button" class="ghost-btn">Clear Highlight</button>
+            </div>
+            <div id="thread-root" class="thread-root"></div>
+          </div>
+        </section>
+
+        <aside class="side-pane panel">
+          <div class="tabs-row" id="tabs-row">
+            <button data-tab="overview" class="tab-btn active" type="button">Overview</button>
+            <button data-tab="analysis" class="tab-btn" type="button">Analysis</button>
+            <button data-tab="validation" class="tab-btn" type="button">Validation</button>
+            <button data-tab="raw" class="tab-btn" type="button">Raw Data</button>
+          </div>
+
+          <div id="tab-overview" class="tab-panel"></div>
+          <div id="tab-analysis" class="tab-panel hidden"></div>
+          <div id="tab-validation" class="tab-panel hidden"></div>
+          <div id="tab-raw" class="tab-panel hidden"></div>
+        </aside>
+      </section>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,614 @@
+{
+  "name": "Mock Thread Baseline Expectations",
+  "description": "Sanity checks for expected outcomes on dev/mockThread.json",
+  "checks": [
+    {
+      "id": "topic-classification",
+      "label": "Topic should map to trauma_safety",
+      "path": "result.summary.topic",
+      "op": "eq",
+      "expected": "trauma_safety"
+    },
+    {
+      "id": "topic-risk-level",
+      "label": "Thread topic risk should be critical",
+      "path": "result.summary.threadTopicRisk.level",
+      "op": "eq",
+      "expected": "critical"
+    },
+    {
+      "id": "risk-patterns",
+      "label": "Critical overlap patterns should be detected",
+      "path": "result.summary.threadTopicRisk.detectedPatternTypes",
+      "op": "includesAll",
+      "expected": [
+        "sexual_abuse",
+        "minor_sexual_abuse"
+      ]
+    },
+    {
+      "id": "overall-risk-floor",
+      "label": "Overall risk should be >= 0.40",
+      "path": "result.summary.overallRisk",
+      "op": "gte",
+      "expected": 0.4
+    },
+    {
+      "id": "climate-supportive",
+      "label": "Conversation climate should be supportive",
+      "path": "result.summary.conversationClimate.label",
+      "op": "eq",
+      "expected": "supportive"
+    },
+    {
+      "id": "alignment-consensus",
+      "label": "Alignment should be consensus",
+      "path": "result.summary.alignment.label",
+      "op": "eq",
+      "expected": "consensus"
+    },
+    {
+      "id": "dominant-non-neutral",
+      "label": "Dominant stance should not be neutral",
+      "path": "result.summary.alignment.dominantStance",
+      "op": "neq",
+      "expected": "neutral"
+    },
+    {
+      "id": "role-observer-floor",
+      "label": "Observer role count should be >= 8",
+      "path": "metrics.roleCounts.observer",
+      "op": "gte",
+      "expected": 8
+    },
+    {
+      "id": "role-info-seeker-floor",
+      "label": "Information seeker role count should be >= 8",
+      "path": "metrics.roleCounts.information_seeker",
+      "op": "gte",
+      "expected": 8
+    },
+    {
+      "id": "tone-suppression-floor",
+      "label": "Low-confidence tone suppression should affect >= 20 comments",
+      "path": "metrics.suppressedTone",
+      "op": "gte",
+      "expected": 20
+    },
+    {
+      "id": "intent-suppression-floor",
+      "label": "Low-confidence intent suppression should affect >= 10 comments",
+      "path": "metrics.suppressedIntent",
+      "op": "gte",
+      "expected": 10
+    }
+  ],
+  "perCommentExpectations": {
+    "ob82xvs": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "moderate",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "ob7urar": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "obh9kx5": {
+      "tone": "negative",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "negative",
+      "intentLabel": "adversarial"
+    },
+    "ob7w57r": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "obf59nc": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "low",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "obkpos0": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "low",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "ob7uo1g": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "low",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7q3s2": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "obb591j": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "obij0ac": {
+      "tone": "neutral",
+      "intent": "supportive",
+      "riskLevel": "low",
+      "toneLabel": null,
+      "intentLabel": "supportive"
+    },
+    "ob7v3nw": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "neutral"
+    },
+    "ob7zhbh": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "ob7vcuj": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "low",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7qwcn": {
+      "tone": "negative",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "negative",
+      "intentLabel": "adversarial"
+    },
+    "ob7ue77": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "obf36a4": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "low",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "ob7qmsx": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "low",
+      "toneLabel": null,
+      "intentLabel": "critical"
+    },
+    "ob89gmg": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "ob88vx5": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "obeo7tc": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "ob7pgp5": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7u3oq": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob80ug5": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "critical"
+    },
+    "ob7tymy": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "ob7pnhi": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "critical"
+    },
+    "ob7pvfe": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "ob7rpca": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "critical"
+    },
+    "ob84ymk": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob8dwdm": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "obf1s17": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7pboq": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7p9jo": {
+      "tone": "neutral",
+      "intent": "supportive",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "supportive"
+    },
+    "ob7pw1l": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob80uaj": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "critical"
+    },
+    "ob8rxxp": {
+      "tone": "negative",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "negative",
+      "intentLabel": "adversarial"
+    },
+    "ob7trul": {
+      "tone": "positive",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": "positive",
+      "intentLabel": null
+    },
+    "obq5g6e": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "ob8fj3h": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "ob7qxzk": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "obb1ecx": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "neutral",
+      "intentLabel": "adversarial"
+    },
+    "ob7r2sj": {
+      "tone": "negative",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "negative",
+      "intentLabel": "adversarial"
+    },
+    "ob7s1o6": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "adversarial"
+    },
+    "ob7p7y2": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "adversarial"
+    },
+    "ob8c68s": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "adversarial"
+    },
+    "ob816is": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "adversarial"
+    },
+    "obeylig": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "adversarial"
+    },
+    "ob81vk2": {
+      "tone": "neutral",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "adversarial"
+    },
+    "ob7rt4z": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7pm8g": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7osp6": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7piiw": {
+      "tone": "negative",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "negative",
+      "intentLabel": "adversarial"
+    },
+    "ob8843y": {
+      "tone": "neutral",
+      "intent": "supportive",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "supportive"
+    },
+    "oba3ju2": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob7qelv": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob82icq": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob8c9jn": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob883p1": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob8i58s": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obdz2h8": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obdvoy3": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obihu67": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "ob7s68v": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obigpqu": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob83cds": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "ob8smwv": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obdrry5": {
+      "tone": "neutral",
+      "intent": "critical",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ober4wa": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "obcg6wv": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obdolgm": {
+      "tone": "neutral",
+      "intent": "curious",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": "curious"
+    },
+    "obd6tk6": {
+      "tone": "negative",
+      "intent": "adversarial",
+      "riskLevel": "none",
+      "toneLabel": "negative",
+      "intentLabel": "adversarial"
+    },
+    "obi0cwe": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob8r9id": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obgpigj": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "obbkxru": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    },
+    "ob8f462": {
+      "tone": "neutral",
+      "intent": "neutral",
+      "riskLevel": "none",
+      "toneLabel": null,
+      "intentLabel": null
+    }
+  },
+  "perCommentDescription": "Exact expected outputs by comment id for tone/intent/risk and display labels"
+}
