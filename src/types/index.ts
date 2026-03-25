@@ -10,7 +10,7 @@ export type UserRole =
   | "information_seeker"
   | "observer"
   | "neutral";
-export type RiskBand = "none" | "low" | "moderate" | "high" | "critical";
+export type RiskBand = "none" | "low" | "moderate" | "high";
 export type CommentTone = "positive" | "negative" | "neutral";
 export type ToneSubLabel =
   | "neutral"
@@ -25,6 +25,7 @@ export type ToneSubLabel =
 export type BehavioralNuance =
   | "neutral"
   | "supportive"
+  | "blame_shifting"
   | "passive_aggressive"
   | "guilt_tripping"
   | "backhanded_compliment"
@@ -99,13 +100,6 @@ export interface Stage1ScoredComment extends HeuristicScore {
   depth: number;
 }
 
-export interface DeepCommentAnalysis {
-  tone: string;
-  intent: string;
-  nuance: string;
-  risk: RiskLevel;
-}
-
 export interface EscalationPoint {
   parentCommentId: string;
   commentId: string;
@@ -150,7 +144,6 @@ export interface HighRiskComment {
     disagreement: number;
     intensity: number;
   };
-  deepAnalysis: DeepCommentAnalysis;
 }
 
 export interface AnalyzeThreadResult {
@@ -207,6 +200,7 @@ export interface AnalyzedComment {
   riskLevel: RiskBand;
   signals: string[];
   signalEvidence: string[];
+  detectedSignals: DetectedSignal[];
 }
 
 export interface UIIndex {

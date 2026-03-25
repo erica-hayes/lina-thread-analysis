@@ -79,7 +79,7 @@ export function buildUIIndex(comments: AnalyzedComment[]): UIIndex {
     index.groups.risk[comment.riskLevel].push(comment.id);
     index.counts.risk[comment.riskLevel] += 1;
 
-    const inRiskyContext = comment.riskLevel === "high" || comment.riskLevel === "critical";
+    const inRiskyContext = comment.riskLevel === "high";
     if (inRiskyContext && comment.intent === "adversarial") {
       index.groups.composite.highRiskAdversarial.push(comment.id);
       index.counts.composite.highRiskAdversarial += 1;

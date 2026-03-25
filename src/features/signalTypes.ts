@@ -34,10 +34,13 @@ export const DISAGREEMENT_KEYWORDS = [
 ];
 
 export const TARGETING_PHRASES = [
-  "you are",
-  "you're",
-  "your",
-  "u are"
+  "your fault",
+  "you always",
+  "you never",
+  "you people",
+  "people like you",
+  "look at you",
+  "u are the problem"
 ];
 
 export const DEFUSING_KEYWORDS = [

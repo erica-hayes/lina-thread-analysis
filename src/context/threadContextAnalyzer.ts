@@ -30,6 +30,12 @@ const TOPIC_KEYWORDS: Array<{
       "predator",
       "child",
       "children",
+      "uncle",
+      "father",
+      "dad",
+      "when i was",
+      "not okay",
+      "happened to me",
       "minor",
       "underage",
       "incest",
@@ -59,6 +65,22 @@ const TOPIC_KEYWORDS: Array<{
     sensitivity: 0.8,
     baselineRisk: 0.75,
     keywords: ["fight", "argument", "abuse", "toxic", "betray", "attack", "cheat"]
+  },
+  {
+    topic: "privacy_boundary",
+    sensitivity: 0.82,
+    baselineRisk: 0.55,
+    keywords: [
+      "privacy",
+      "tracked",
+      "tracking",
+      "track my location",
+      "location",
+      "find my friends",
+      "without asking",
+      "without telling",
+      "monitoring"
+    ]
   }
 ];
 

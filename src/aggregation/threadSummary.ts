@@ -101,8 +101,7 @@ export function summarizeThread(
     none: 0,
     low: 0.25,
     moderate: 0.5,
-    high: 0.75,
-    critical: 1
+    high: 1
   };
   const topicRiskScore = topicRiskScoreByLevel[topicRisk.level] ?? 0;
 

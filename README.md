@@ -21,9 +21,9 @@ This codebase is backend-only and intentionally avoids sending full threads to L
 2. Parse raw Reddit JSON into normalized comments
 3. Build parent/child comment tree with depth and parent references
 4. Run Stage 1 heuristic scoring across all comments
-5. Extract conversational chains from reply paths and interaction pairs
-6. Analyze chain dynamics for escalation and interaction type
-7. Run Stage 2 deep-analysis stub only on high-priority and peak-chain comments
+5. Classify tone, intent, and nuance for all comments using signals and context
+6. Extract conversational chains from reply paths and interaction pairs
+7. Analyze chain dynamics for escalation and interaction type
 8. Aggregate context + comment signals + chain dynamics into thread summary
 
 ## Layers
@@ -45,9 +45,13 @@ src/
 	features/
 		heuristicScorer.ts
 		signalTypes.ts
+		signalRules.ts
+		detectSignals.ts
+		classifyTone.ts
+		classifyIntent.ts
+		classifyNuance.ts
 	analysis/
 		stage1.ts
-		stage2.ts
 	aggregation/
 		escalationDetector.ts
 		roleDetector.ts

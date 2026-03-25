@@ -138,8 +138,20 @@ export function scoreCommentHeuristic(input: HeuristicInput): HeuristicScore {
   }
 
   let signalRiskAdjustment = 0;
+  const perRuleCaps: Record<string, number> = {
+    "gaslighting-invalidation": 1.7,
+    "concern-framed-invalidation": 1.0,
+    "polite-masked-invalidation": 1.2,
+    "passive-aggressive-snark": 1.0
+  };
+  const perRuleTotals = new Map<string, number>();
   for (const detectedSignal of detectedSignals) {
-    signalRiskAdjustment += detectedSignal.riskContribution;
+    const prev = perRuleTotals.get(detectedSignal.ruleName) ?? 0;
+    const cap = perRuleCaps[detectedSignal.ruleName] ?? Number.POSITIVE_INFINITY;
+    const remaining = Math.max(0, cap - prev);
+    const appliedContribution = Math.min(remaining, detectedSignal.riskContribution);
+    perRuleTotals.set(detectedSignal.ruleName, prev + appliedContribution);
+    signalRiskAdjustment += appliedContribution;
   }
   if (signalRiskAdjustment !== 0) {
     score += signalRiskAdjustment;

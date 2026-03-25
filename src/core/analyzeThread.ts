@@ -2,7 +2,6 @@ import { detectUserRoles } from "../aggregation/roleDetector";
 import { summarizeThread } from "../aggregation/threadSummary";
 import { buildUIIndex } from "../aggregation/uiIndex";
 import { runStage1 } from "../analysis/stage1";
-import { runStage2 } from "../analysis/stage2";
 import { analyzeChains } from "../chains/analyzeChain";
 import { extractChains } from "../chains/extractChains";
 import { analyzeThreadContext } from "../context/threadContextAnalyzer";
@@ -17,19 +16,101 @@ const TONE_LABEL_CONFIDENCE_THRESHOLD = 0.55;
 const INTENT_LABEL_CONFIDENCE_THRESHOLD = 0.58;
 
 function scoreToRiskLevel(score: number): RiskBand {
-  if (score >= 14) {
-    return "critical";
-  }
-  if (score >= 10) {
+  if (score >= 6) {
     return "high";
   }
-  if (score >= 6) {
+  if (score >= 3.5) {
     return "moderate";
   }
-  if (score >= 2) {
+  if (score >= 0.5) {
     return "low";
   }
   return "none";
+}
+
+function computeContextAdjustedScore(baseScore: number, text: string, signalTags: string[], topic: string): number {
+  let adjusted = baseScore;
+  const lowerText = (text ?? "").toLowerCase();
+  const normalized = signalTags.map((item) => item.toLowerCase());
+
+  const hasInvalidation = normalized.some(
+    (item) => item.includes("invalidation") || item.includes("gaslighting") || item.includes("dismissive")
+  );
+  const hasTargeting = normalized.some((item) => item.includes("targeting") || item.includes("blame"));
+  const hasConcernFramedMinimization = /\b(he'?s\s+just\s+worried\s+about\s+you|parents\s+do\s+that)\b/.test(lowerText);
+  const hasPoliteMaskingInvalidation =
+    /\b(i'?m\s+sorry\s+but\s+have\s+you\s+considered)\b/.test(lowerText) &&
+    /\b(too\s+sensitive|overreacting|remembering\s+it\s+wrong)\b/.test(lowerText);
+  const hasFalseEmpathy =
+    /\b(oh\s+wow|i'?m\s+so\s+sorry\s+you\s+had\s+to\s+deal\s+with\s+that)\b.*\b(just\s+being\s+happier)\b|🙄/.test(lowerText) ||
+    /\bjust\s+being\s+happier\b/.test(lowerText);
+  const hasConcernMaskedAttack = /\b(i'?m\s+so\s+concerned\s+about\s+you)\b.*\b(just\s+weak|weak)\b/.test(lowerText);
+  const hasWellnessMinimization =
+    /\b(you'?ll\s+feel\s+better\s+soon|maybe\s+try\s+yoga|maybe\s+try\s+meditation|just\s+exercis(e|ing)\s+more|that\s+always\s+works\s+for\s+me)\b/.test(
+      lowerText
+    );
+  const hasTraumaMemoryInvalidation = /\b(are\s+you\s+sure\s+that'?s\s+what\s+happened|kids\s+misremember)\b/.test(lowerText);
+  const hasPrivacyGaslighting = /\b(you'?re\s+overreacting|it'?s\s+normal\s+for\s+family)\b/.test(lowerText);
+  const hasConcernFramedGaslighting =
+    /\b(you'?re\s+overreacting|you\s+might\s+be\s+overreacting)\b/.test(lowerText) &&
+    /\b(they\s+sound\s+like\s+they\s+genuinely\s+care|didn'?t\s+mean\s+it\s+that\s+way)\b/.test(lowerText);
+
+  if (topic === "trauma_safety" && hasInvalidation) {
+    adjusted += 1.1;
+  }
+
+  if (topic === "trauma_safety" && hasTargeting) {
+    adjusted += 1.6;
+  } else if (topic === "mental_health" && hasInvalidation) {
+    adjusted += 0.2;
+  } else if (topic === "privacy_boundary" && hasInvalidation) {
+    adjusted += 0.6;
+    if (hasConcernFramedMinimization) {
+      adjusted += 0.2;
+    }
+  }
+
+  if (
+    topic === "trauma_safety" &&
+    /\b(kids\s+misremember|that\s+doesn'?t\s+make\s+sense|why\s+did\s+you\s+wait|are\s+you\s+sure\s+that'?s\s+what\s+happened|really\s+abuse|overreacting)\b/.test(
+      lowerText
+    )
+  ) {
+    adjusted += 1.4;
+  }
+
+  if (hasFalseEmpathy) {
+    adjusted += 1.0;
+  }
+
+  if (hasPoliteMaskingInvalidation) {
+    adjusted += 1.9;
+  }
+
+  if (hasConcernFramedGaslighting) {
+    adjusted += 1.6;
+  }
+
+  if (hasConcernMaskedAttack) {
+    adjusted += 2.9;
+    if (topic === "mental_health") {
+      adjusted += 0.5;
+    }
+  }
+
+  if (topic === "mental_health" && hasWellnessMinimization) {
+    adjusted += 0.6;
+  }
+
+  if (topic === "trauma_safety" && hasTraumaMemoryInvalidation) {
+    adjusted += 1.8;
+  }
+
+  if (topic === "privacy_boundary" && hasPrivacyGaslighting) {
+    adjusted += 2.0;
+  }
+
+  return Number(adjusted.toFixed(2));
 }
 
 export function analyzeThread(
@@ -47,23 +128,6 @@ export function analyzeThread(
   const chains = extractChains(tree);
   const chainAnalyses = analyzeChains(chains, stage1.scoreByCommentId);
 
-  const peakChainCommentIds = new Set<string>();
-  for (const analysis of chainAnalyses) {
-    peakChainCommentIds.add(analysis.peakCommentId);
-  }
-
-  const stage2CommentIds = new Set<string>();
-  for (const comment of stage1.scored) {
-    if (comment.priority === "high") {
-      stage2CommentIds.add(comment.commentId);
-    }
-  }
-  for (const commentId of peakChainCommentIds) {
-    stage2CommentIds.add(commentId);
-  }
-
-  const stage2DeepAnalysis = runStage2([...stage2CommentIds], tree);
-
   const userRoles = detectUserRoles(chains, chainAnalyses, stage1.scoreByCommentId, tree.byId);
   const summary = summarizeThread(context, tree, chains, chainAnalyses, stage1.scored, userRoles);
 
@@ -71,7 +135,6 @@ export function analyzeThread(
 
   const analyzedComments: AnalyzedComment[] = stage1.scored.map((score) => {
     const node = tree.byId.get(score.commentId);
-    const riskLevel = scoreToRiskLevel(score.score);
     const signalTags = Array.from(
       new Set([
         ...score.flags,
@@ -80,6 +143,8 @@ export function analyzeThread(
         ...score.detectedSignals.map((item) => item.ruleName)
       ])
     );
+    const adjustedScore = computeContextAdjustedScore(score.score, node?.body ?? "", signalTags, context.topic);
+    const riskLevel = scoreToRiskLevel(adjustedScore);
     const signalEvidence = score.detectedSignals
       .slice()
       .sort((a, b) => b.riskContribution - a.riskContribution)
@@ -105,7 +170,8 @@ export function analyzeThread(
       intentConfidence: intentResult.confidence,
       riskLevel,
       signals: signalTags,
-      signalEvidence
+      signalEvidence,
+      detectedSignals: score.detectedSignals
     };
   });
 
@@ -126,15 +192,12 @@ export function analyzeThread(
       return acc;
     }, {}),
     composites: {
-      highRiskAdversarial: analyzedComments.filter(
-        (item) => (item.riskLevel === "high" || item.riskLevel === "critical") && item.intent === "adversarial"
-      ).length,
-      highRiskNegativeTone: analyzedComments.filter(
-        (item) => (item.riskLevel === "high" || item.riskLevel === "critical") && item.tone === "negative"
-      ).length,
-      supportiveInRiskyContext: analyzedComments.filter(
-        (item) => (item.riskLevel === "high" || item.riskLevel === "critical") && item.intent === "supportive"
-      ).length
+      highRiskAdversarial: analyzedComments.filter((item) => item.riskLevel === "high" && item.intent === "adversarial")
+        .length,
+      highRiskNegativeTone: analyzedComments.filter((item) => item.riskLevel === "high" && item.tone === "negative")
+        .length,
+      supportiveInRiskyContext: analyzedComments.filter((item) => item.riskLevel === "high" && item.intent === "supportive")
+        .length
     }
   };
 
@@ -150,13 +213,7 @@ export function analyzeThread(
       flags: score.flags,
       priority: score.priority,
       detectedSignals: score.detectedSignals,
-      signals: score.signals,
-      deepAnalysis: stage2DeepAnalysis.get(score.commentId) ?? {
-        tone: "neutral",
-        intent: "unknown",
-        nuance: "stage2-not-run",
-        risk: "low"
-      }
+      signals: score.signals
     };
   });
 

@@ -6,8 +6,7 @@ const RISK_PRIORITY: Record<RiskBand, number> = {
   none: 0,
   low: 1,
   moderate: 2,
-  high: 3,
-  critical: 4
+  high: 3
 };
 
 function collectEvidenceSnippets(text: string, pattern: RegExp, limit = 3): string[] {
@@ -96,7 +95,7 @@ export function assessThreadTopicRisk(threadContext: ThreadContext): TopicRisk {
   }
 
   if (minorRefCount > 0 && sexualAbuseCount > 0) {
-    level = "critical";
+    level = "high";
     confidence = 0.96;
     factors.push("minor + sexual abuse overlap detected in thread context");
     detectedPatternTypes.push("minor_sexual_abuse");
@@ -121,7 +120,7 @@ export function assessThreadTopicRisk(threadContext: ThreadContext): TopicRisk {
     (minorRefCount > 0 && violentThreatCount > 0) ||
     (minorRefCount > 0 && incestAbuseCount > 0)
   ) {
-    level = "critical";
+    level = "high";
     confidence = Math.max(confidence, 0.96);
     factors.push("compound extreme-risk overlap detected");
     detectedPatternTypes.push("compound_extreme_risk");

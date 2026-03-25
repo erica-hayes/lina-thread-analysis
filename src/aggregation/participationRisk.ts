@@ -1,11 +1,8 @@
 import { AlignmentSummary, ConversationClimate, ParticipationRisk, RiskBand, TopicRisk } from "../types";
 
 function bandToScore(level: RiskBand): number {
-  if (level === "critical") {
-    return 1;
-  }
   if (level === "high") {
-    return 0.78;
+    return 1;
   }
   if (level === "moderate") {
     return 0.56;
@@ -17,9 +14,6 @@ function bandToScore(level: RiskBand): number {
 }
 
 function scoreToBand(score: number): RiskBand {
-  if (score >= 0.82) {
-    return "critical";
-  }
   if (score >= 0.64) {
     return "high";
   }
